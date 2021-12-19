@@ -70,7 +70,7 @@ class AuthController extends Controller
         // generate token
         $token = $user->createToken('Laravel Password Grant Client')->plainTextToken;
 
-        return response([
+        return response()->json([
             'token' => $token,
             'user' => $user,
             'message' => 'User Created'
