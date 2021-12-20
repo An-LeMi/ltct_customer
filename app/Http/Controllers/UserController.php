@@ -72,7 +72,14 @@ class UserController extends Controller
     {
         $user = User::find($id);
         if ($user && $user->status == 'active') {
-            $user->update($request->all());
+            // check $user is current user
+            if ($user->id == auth()->user()->id) {
+                $user->update($request->all());
+            } else {
+                return response()->json([
+                    'message' => 'You are not authorized to update this user.',
+                ], Response::HTTP_BAD_REQUEST);
+            }
             return response()->json([
                 'message' => 'User updated successfully',
                 'user' => $user,
