@@ -41,6 +41,7 @@ class AuthController extends Controller
             'username' => 'required|unique:users',
             'password' => 'required|confirmed',
             'email' => 'required|email|unique:users',
+            'phone' => 'required|unique:users|digits:10',
         ]);
 
         // check user exist with phone
@@ -123,5 +124,4 @@ class AuthController extends Controller
             'message' => 'Successfully logged in'
         ], Response::HTTP_OK);
     }
-
 }
