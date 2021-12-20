@@ -41,6 +41,7 @@ class AuthController extends Controller
             'username' => 'required|unique:users',
             'password' => 'required|confirmed',
             'email' => 'required|email|unique:users',
+            'phone' => ['required', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'digits_between:10,12', Rule::unique('users')->ignore($request->id)],
         ]);
 
         // check user exist with phone
