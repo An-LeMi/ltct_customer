@@ -105,6 +105,16 @@ class AuthController extends Controller
             ], Response::HTTP_UNAUTHORIZED);
         }
 
+        if ($user->status == 'inactive') {
+            return response()->json([
+                'message' => 'User is inactive'
+            ], Response::HTTP_UNAUTHORIZED);
+        } else if ($user->status == 'blocked') {
+            return response()->json([
+                'message' => 'User is blocked'
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+
         // generate token
         $token = $user->createToken('Laravel Password Grant Client')->plainTextToken;
 
@@ -115,7 +125,7 @@ class AuthController extends Controller
     }
 
     // get user
-    public function getUser(Request $request)
+    public function getUser()
     {
         $user = Auth::user();
 
