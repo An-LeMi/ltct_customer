@@ -24,15 +24,18 @@ Route::post('register', [AuthController::class, 'register']);
 Route::get('users/active', [UserController::class, 'active']);
 // get all inactive users
 Route::get('users/inactive', [UserController::class, 'inactive']);
+// get all blocked users
+Route::get('users/blocked', [UserController::class, 'blocked']);
 // get customer id
 Route::get('customer-id/{phone}', [AuthController::class, 'getCustomerID']);
 
 // protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('logout', [AuthController::class, 'logout']);
-    Route::get('user', [AuthController::class, 'getUser']);
-    // update user info
-    Route::put('user/{id}', [UserController::class, 'update']);
-    // delete user
-    Route::delete('user/{id}', [UserController::class, 'destroy']);
+    Route::get('user_info', [AuthController::class, 'getUser']);
+
+    // user resource
+    Route::resource('user', UserController::class)->except(['create', 'edit', 'store']);
+    // search user by name or phone
+    Route::post('user/search', [UserController::class, 'search']);
 });
