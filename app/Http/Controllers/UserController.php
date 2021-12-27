@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\user;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -18,7 +18,7 @@ class UserController extends Controller
         //
         $currentUser = auth()->user();
         if ($currentUser->role == 'admin') {
-            $users = user::all();
+            $users = User::all();
             return response()->json([
                 'users' => $users,
             ], Response::HTTP_OK);
@@ -61,7 +61,7 @@ class UserController extends Controller
         //
         $currentUser = auth()->user();
         if ($currentUser->role == 'admin') {
-            $user = user::find($id);
+            $user = User::find($id);
             if ($user) {
                 return response()->json([
                     'user' => $user,
