@@ -119,6 +119,7 @@ class AuthController extends Controller
         $token = $user->createToken('Laravel Password Grant Client')->plainTextToken;
 
         return response([
+            'user' => $user,
             'token' => $token,
             'message' => 'Successfully logged in'
         ], Response::HTTP_OK);
