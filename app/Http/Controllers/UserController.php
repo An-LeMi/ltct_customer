@@ -104,25 +104,15 @@ class UserController extends Controller
             // check $user is current user
             if ($user->id == auth()->user()->id) {
                 $user->update($request->all());
-<<<<<<< HEAD
-=======
                 return response()->json([
                     'message' => 'User updated successfully',
                     'user' => $user,
                 ], Response::HTTP_OK);
->>>>>>> upstream/main
             } else {
                 return response()->json([
                     'message' => 'You are not authorized to update this user.',
                 ], Response::HTTP_BAD_REQUEST);
             }
-<<<<<<< HEAD
-            return response()->json([
-                'message' => 'User updated successfully',
-                'user' => $user,
-            ], Response::HTTP_OK);
-=======
->>>>>>> upstream/main
         } else {
             return response()->json([
                 'message' => 'User not found',

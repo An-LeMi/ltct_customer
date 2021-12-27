@@ -41,7 +41,7 @@ class AuthController extends Controller
             'username' => 'required|unique:users',
             'password' => 'required|confirmed',
             'email' => 'required|email|unique:users',
-            'phone' => 'required|unique:users|digits:10',
+            'phone' => 'required|digits:10',
         ]);
 
         // check user exist with phone
