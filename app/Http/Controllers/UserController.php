@@ -205,14 +205,23 @@ class UserController extends Controller
     // search user by name or phone
     public function search(Request $request)
     {
-        $users = User::where('name', 'like', '%' . $request->name . '%')
-            ->orWhere('phone', 'like', '%' . $request->phone . '%')
-            ->get();
+        $currentUser = auth()->user();
+        if ($currentUser->role == 'admin') {
+            $users = User::where('name', 'like', '%' . $request->name . '%')
+                ->orWhere('phone', 'like', '%' . $request->phone . '%')
+                ->get();
 
-        return response([
-            'users' => $users,
-            'message' => 'Search user',
-            'status' => 200
-        ], Response::HTTP_OK);
+            return response([
+                'users' => $users,
+                'message' => 'Search user',
+                'status' => 200
+            ], Response::HTTP_OK);
+        }
+        else {
+            return response()->json([
+                'message' => 'You are not authorized to access this resource',
+                'status' => 401
+            ], Response::HTTP_UNAUTHORIZED);
+        }
     }
 }
