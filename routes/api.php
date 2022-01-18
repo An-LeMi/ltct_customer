@@ -29,13 +29,14 @@ Route::get('users/blocked', [UserController::class, 'blocked']);
 // get customer id
 Route::get('customer-id/{phone}', [AuthController::class, 'getCustomerID']);
 
+// user resource
+Route::resource('user', UserController::class)->except(['create', 'edit', 'store']);
+
+// search user by name or phone
+Route::post('user/search', [UserController::class, 'search']);
+
 // protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('logout', [AuthController::class, 'logout']);
     Route::get('user_info', [AuthController::class, 'getUser']);
-
-    // user resource
-    Route::resource('user', UserController::class)->except(['create', 'edit', 'store']);
-    // search user by name or phone
-    Route::post('user/search', [UserController::class, 'search']);
 });

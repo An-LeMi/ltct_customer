@@ -32,7 +32,7 @@ class AuthController extends Controller
         }
 
         return response()->json([
-            'id' => $user->id,
+            'data' => $user->id,
             'status' => 200
         ], Response::HTTP_OK);
     }
@@ -76,7 +76,7 @@ class AuthController extends Controller
 
         return response()->json([
             'token' => $token,
-            'user' => $user,
+            'data' => $user,
             'message' => 'User Created',
             'status' => 201
         ], Response::HTTP_CREATED);
@@ -127,7 +127,7 @@ class AuthController extends Controller
         $token = $user->createToken('Laravel Password Grant Client')->plainTextToken;
 
         return response([
-            'user' => $user,
+            'data' => $user,
             'token' => $token,
             'message' => 'Successfully logged in',
             'status' => 200
@@ -140,7 +140,7 @@ class AuthController extends Controller
         $user = Auth::user();
 
         return response([
-            'user' => $user,
+            'data' => $user,
             'message' => 'Successfully logged in',
             'status' => 200
         ], Response::HTTP_OK);

@@ -16,19 +16,19 @@ class UserController extends Controller
     public function index()
     {
         //
-        $currentUser = auth()->user();
-        if ($currentUser->role == 'admin') {
-            $users = User::all();
-            return response()->json([
-                'users' => $users,
-                'status' => 200
-            ], Response::HTTP_OK);
-        } else {
-            return response()->json([
-                'message' => 'You are not authorized to access this resource',
-                'status' => 401
-            ], Response::HTTP_UNAUTHORIZED);
-        }
+        // $currentUser = auth()->user();
+        // if ($currentUser->role == 'admin') {
+        $users = User::all();
+        return response()->json([
+            'data' => $users,
+            'status' => 200
+        ], Response::HTTP_OK);
+        // } else {
+        // return response()->json([
+        //     'message' => 'You are not authorized to access this resource',
+        //     'status' => 401
+        // ], Response::HTTP_UNAUTHORIZED);
+        // }
     }
 
     /**
@@ -61,26 +61,26 @@ class UserController extends Controller
     public function show($id)
     {
         //
-        $currentUser = auth()->user();
-        if ($currentUser->role == 'admin') {
-            $user = User::find($id);
-            if ($user) {
-                return response()->json([
-                    'user' => $user,
-                    'status' => 200
-                ], Response::HTTP_OK);
-            } else {
-                return response()->json([
-                    'message' => 'User not found',
-                    'status' => 404
-                ], Response::HTTP_NOT_FOUND);
-            }
+        // $currentUser = auth()->user();
+        // if ($currentUser->role == 'admin') {
+        $user = User::find($id);
+        if ($user) {
+            return response()->json([
+                'data' => $user,
+                'status' => 200
+            ], Response::HTTP_OK);
         } else {
             return response()->json([
-                'message' => 'You are not authorized to access this resource',
-                'status' => 401
-            ], Response::HTTP_UNAUTHORIZED);
+                'message' => 'User not found',
+                'status' => 404
+            ], Response::HTTP_NOT_FOUND);
         }
+        // } else {
+        //     return response()->json([
+        //         'message' => 'You are not authorized to access this resource',
+        //         'status' => 401
+        //     ], Response::HTTP_UNAUTHORIZED);
+        // }
     }
 
     /**
@@ -107,19 +107,19 @@ class UserController extends Controller
 
         if ($user && $user->status == 'active') {
             // check $user is current user
-            if ($user->id == auth()->user()->id) {
-                $user->update($request->all());
-                return response()->json([
-                    'message' => 'User updated successfully',
-                    'user' => $user,
-                    'status' => 200
-                ], Response::HTTP_OK);
-            } else {
-                return response()->json([
-                    'message' => 'You are not authorized to update this user.',
-                    'status' => 400
-                ], Response::HTTP_BAD_REQUEST);
-            }
+            // if ($user->id == auth()->user()->id) {
+            $user->update($request->all());
+            return response()->json([
+                'message' => 'User updated successfully',
+                'data' => $user,
+                'status' => 200
+            ], Response::HTTP_OK);
+            // } else {
+            //     return response()->json([
+            //         'message' => 'You are not authorized to update this user.',
+            //         'status' => 400
+            //     ], Response::HTTP_BAD_REQUEST);
+            // }
         } else {
             return response()->json([
                 'message' => 'User not found',
@@ -136,28 +136,28 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $currentUser = auth()->user();
+        // $currentUser = auth()->user();
         $user = User::find($id);
 
         if ($user && $user->status == 'active') {
             // check $user is current user or admin
-            if ($user->id == $currentUser->id || $currentUser->role == 'admin') {
-                $user->update([
-                    'status' => 'blocked',
-                ]);
-                // delete all tokens of user
-                $user->tokens()->delete();
+            // if ($user->id == $currentUser->id || $currentUser->role == 'admin') {
+            $user->update([
+                'status' => 'blocked',
+            ]);
+            // delete all tokens of user
+            $user->tokens()->delete();
 
-                return response()->json([
-                    'message' => 'User deleted successfully',
-                    'status' => 200
-                ], Response::HTTP_OK);
-            } else {
-                return response()->json([
-                    'message' => 'You are not authorized to delete this user.',
-                    'status' => 400
-                ], Response::HTTP_BAD_REQUEST);
-            }
+            return response()->json([
+                'message' => 'User deleted successfully',
+                'status' => 200
+            ], Response::HTTP_OK);
+            // } else {
+            //     return response()->json([
+            //         'message' => 'You are not authorized to delete this user.',
+            //         'status' => 400
+            //     ], Response::HTTP_BAD_REQUEST);
+            // }
         } else {
             return response()->json([
                 'message' => 'User not found',
@@ -172,7 +172,7 @@ class UserController extends Controller
         $users = User::where('status', 'active')->get();
 
         return response([
-            'users' => $users,
+            'data' => $users,
             'message' => 'Active user',
             'status' => 200
         ], Response::HTTP_OK);
@@ -184,7 +184,7 @@ class UserController extends Controller
         $users = User::where('status', 'inactive')->get();
 
         return response([
-            'users' => $users,
+            'data' => $users,
             'message' => 'Inactive user',
             'status' => 200
         ], Response::HTTP_OK);
@@ -196,7 +196,7 @@ class UserController extends Controller
         $users = User::where('status', 'blocked')->get();
 
         return response([
-            'users' => $users,
+            'data' => $users,
             'message' => 'Blocked user',
             'status' => 200
         ], Response::HTTP_OK);
@@ -205,23 +205,22 @@ class UserController extends Controller
     // search user by name or phone
     public function search(Request $request)
     {
-        $currentUser = auth()->user();
-        if ($currentUser->role == 'admin') {
-            $users = User::where('name', 'like', '%' . $request->name . '%')
-                ->orWhere('phone', 'like', '%' . $request->phone . '%')
-                ->get();
+        // $currentUser = auth()->user();
+        // if ($currentUser->role == 'admin') {
+        $users = User::where('name', 'like', '%' . $request->name . '%')
+            ->orWhere('phone', 'like', '%' . $request->phone . '%')
+            ->get();
 
-            return response([
-                'users' => $users,
-                'message' => 'Search user',
-                'status' => 200
-            ], Response::HTTP_OK);
-        }
-        else {
-            return response()->json([
-                'message' => 'You are not authorized to access this resource',
-                'status' => 401
-            ], Response::HTTP_UNAUTHORIZED);
-        }
+        return response([
+            'data' => $users,
+            'message' => 'Search user',
+            'status' => 200
+        ], Response::HTTP_OK);
+        // } else {
+        //     return response()->json([
+        //         'message' => 'You are not authorized to access this resource',
+        //         'status' => 401
+        //     ], Response::HTTP_UNAUTHORIZED);
+        // }
     }
 }
