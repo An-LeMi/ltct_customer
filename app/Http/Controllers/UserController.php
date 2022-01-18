@@ -207,23 +207,24 @@ class UserController extends Controller
     {
         // $currentUser = auth()->user();
         // if ($currentUser->role == 'admin') {
-        if ($request->name == NULL) {
-            $request->name = '';
+        if ($request->name != NULL && $request->phone != NULL) {
+            $users = User::where('name', 'like', '%' . $request->name . '%')
+                ->where('phone', 'like', '%' . $request->phone . '%')
+                ->get();
+        } else if ($request->name == NULL) {
+            $users = User::where('phone', 'like', '%' . $request->phone . '%')->get();
+        } else if ($request->phone == NULL) {
+            $users = User::where('name', 'like', '%' . $request->name . '%')->get();
         }
-        if ($request->phone == NULL) {
-            $request->phone = '';
-        }
-        $users = User::where('name', 'like', '%' . $request->name . '%')
-            ->where('phone', 'like', '%' . $request->phone . '%')
-            ->get();
+        // $users = User::where('name', 'like', '%' . $request->name . '%')
+        //     ->where('phone', 'like', '%' . $request->phone . '%')
+        //     ->get();
 
-        if ($users) {
-            return response([
-                'data' => $users,
-                'message' => 'Search user',
-                'status' => 200
-            ], Response::HTTP_OK);
-        }
+        return response([
+            'data' => $users,
+            'message' => 'Search user',
+            'status' => 200
+        ], Response::HTTP_OK);
 
         // } else {
         //     return response()->json([
