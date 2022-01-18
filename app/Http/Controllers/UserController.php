@@ -207,15 +207,24 @@ class UserController extends Controller
     {
         // $currentUser = auth()->user();
         // if ($currentUser->role == 'admin') {
+        if ($request->name == NULL) {
+            $request->name = '';
+        }
+        if ($request->phone == NULL) {
+            $request->phone = '';
+        }
         $users = User::where('name', 'like', '%' . $request->name . '%')
-            ->orWhere('phone', 'like', '%' . $request->phone . '%')
+            ->where('phone', 'like', '%' . $request->phone . '%')
             ->get();
 
-        return response([
-            'data' => $users,
-            'message' => 'Search user',
-            'status' => 200
-        ], Response::HTTP_OK);
+        if ($users) {
+            return response([
+                'data' => $users,
+                'message' => 'Search user',
+                'status' => 200
+            ], Response::HTTP_OK);
+        }
+
         // } else {
         //     return response()->json([
         //         'message' => 'You are not authorized to access this resource',
